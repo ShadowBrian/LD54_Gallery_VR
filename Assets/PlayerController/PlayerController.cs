@@ -79,7 +79,7 @@ public class PlayerController : MonoBehaviour
         {
             _yVelocity = Mathf.Max(_yVelocity - gravity * Time.deltaTime, -maxFallSpeed);
         }
-        Vector3 velocity = Time.deltaTime * movementSpeed * (transform.forward * _movementInput.y + transform.right * _movementInput.x) + Time.deltaTime * _yVelocity * Vector3.up;
+        Vector3 velocity = Time.deltaTime * movementSpeed * (_camera.transform.forward * _movementInput.y + _camera.transform.right * _movementInput.x) + Time.deltaTime * _yVelocity * Vector3.up;
         _controller.Move(velocity);
         if (_controller.isGrounded)
         {
@@ -94,7 +94,14 @@ public class PlayerController : MonoBehaviour
     
     public void OnInputMove(InputAction.CallbackContext ctx)
     {
-        _movementInput = ctx.ReadValue<Vector2>();
+
+            _movementInput = ctx.ReadValue<Vector2>();
+        
+    }
+
+    public void OnInputMove(Vector2 moveOverride)
+    {
+         _movementInput = moveOverride;
     }
 
     public void OnInputJump(InputAction.CallbackContext ctx)
@@ -102,9 +109,22 @@ public class PlayerController : MonoBehaviour
         _hasJustJumped = ctx.performed;
     }
 
+    public void OnInputJump(bool value)
+    {
+        _hasJustJumped = value;
+    }
+
     public void OnInputZoom(InputAction.CallbackContext ctx)
     {
         if (ctx.performed)
+        {
+            phone.ToggleZoomAnim();
+        }
+    }
+
+    public void OnInputZoom(bool value)
+    {
+        if (value)
         {
             phone.ToggleZoomAnim();
         }
@@ -118,6 +138,23 @@ public class PlayerController : MonoBehaviour
             phone.ToggleButtonIcon(true);
         }
         else if (ctx.canceled)
+        {
+            phone.ToggleButtonIcon(false);
+        }
+    }
+
+    public void OnTakePicture(bool value)
+    {
+        if (value)
+        {
+            phone.TakePicture();
+            phone.ToggleButtonIcon(true);
+        }
+    }
+
+    public void OnTakePictureReleased(bool value)
+    {
+        if (value)
         {
             phone.ToggleButtonIcon(false);
         }
@@ -139,6 +176,22 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void OnPrevPicture(bool value)
+    {
+        if (value)
+        {
+            phone.MoveCursor(true);
+        }
+    }
+
+    public void OnNextPicture(bool value)
+    {
+        if (value)
+        {
+            phone.MoveCursor(false);
+        }
+    }
+
     public void OnDeletePic(InputAction.CallbackContext ctx)
     {
         if (ctx.performed)
@@ -146,5 +199,13 @@ public class PlayerController : MonoBehaviour
             phone.TryDeleteImage();
         }
     }
-    
+
+    public void OnDeletePic(bool value)
+    {
+        if (value)
+        {
+            phone.TryDeleteImage();
+        }
+    }
+
 }

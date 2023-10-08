@@ -44,7 +44,7 @@ public class CameraPhone : MonoBehaviour
 
     private bool _screenshotQueued;
 
-    private Camera _camera;
+    public Camera _camera;
     [SerializeField] private LayerMask layerMask;
 
     private Rect _screenshotRect;
@@ -83,7 +83,7 @@ public class CameraPhone : MonoBehaviour
 
     private void Start()
     {
-        _camera = Camera.main;
+        //f_camera = Camera.main;
         _animator = GetComponent<Animator>();
         _zoomDirParam = Animator.StringToHash("ZoomDir");
 
@@ -220,7 +220,8 @@ public class CameraPhone : MonoBehaviour
         }
 
         _screenshotQueued = false;
-        Texture2D screenshotTexture = new Texture2D((int)_screenshotRect.width, (int)_screenshotRect.height, TextureFormat.RGB24, false, true, true);
+        Texture2D screenshotTexture = new Texture2D(256, 256, TextureFormat.RGB24, false, true, true);
+        _screenshotRect = new Rect(0, 0, 256, 256);
         screenshotTexture.ReadPixels(_screenshotRect, 0, 0);
         // Should resize texture here to save memory, but can't figure out easy way to do that
         screenshotTexture.Apply();
