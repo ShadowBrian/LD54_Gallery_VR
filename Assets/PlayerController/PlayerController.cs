@@ -79,7 +79,9 @@ public class PlayerController : MonoBehaviour
         {
             _yVelocity = Mathf.Max(_yVelocity - gravity * Time.deltaTime, -maxFallSpeed);
         }
-        Vector3 velocity = Time.deltaTime * movementSpeed * (_camera.transform.forward * _movementInput.y + _camera.transform.right * _movementInput.x) + Time.deltaTime * _yVelocity * Vector3.up;
+        var fixedMoveInput = (_camera.transform.forward * _movementInput.y + _camera.transform.right * _movementInput.x);
+        fixedMoveInput.y = 0;
+        Vector3 velocity = Time.deltaTime * movementSpeed * fixedMoveInput + Time.deltaTime * _yVelocity * Vector3.up;
         _controller.Move(velocity);
         if (_controller.isGrounded)
         {

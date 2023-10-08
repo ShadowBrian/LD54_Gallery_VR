@@ -133,9 +133,9 @@ public class CameraPhone : MonoBehaviour
 
             foreach (var obj in Capturable.Rendered)
             {
-                var objectScreenPoint = _camera.WorldToScreenPoint(obj.transform.position);
+                var objectScreenPoint = Camera.main.WorldToScreenPoint(obj.transform.position);
                 RaycastHit hit;
-                bool captured = _screenshotRect.Contains(objectScreenPoint) && (!Physics.Linecast(_camera.transform.position, obj.transform.position, out hit, layerMask) || hit.collider == obj.Collider);
+                bool captured = _screenshotRect.Contains(objectScreenPoint) && (!Physics.Linecast(Camera.main.transform.position, obj.transform.position, out hit, layerMask) || hit.collider == obj.Collider);
                 if (captured)
                 {
                     CollectionManager.AddPhoto(obj, _screenshots.Count);
